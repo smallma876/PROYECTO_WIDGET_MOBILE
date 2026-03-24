@@ -16,6 +16,7 @@ export function HomeScreen({ navigation }: Props): React.JSX.Element {
   const {
     stickers,
     isLoading,
+    error,
     shareSticker,
     deleteSticker,
   } = useStickers(
@@ -34,7 +35,13 @@ export function HomeScreen({ navigation }: Props): React.JSX.Element {
 
       <InstructionsCard />
 
-      {!isLoading && (
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      )}
+
+      {!isLoading && !error && (
         <View style={styles.historySection}>
           <Text style={styles.sectionTitle}>Your Stickers</Text>
           <StickerGrid
@@ -78,5 +85,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     paddingHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.sm,
+  },
+  errorContainer: {
+    padding: theme.spacing.lg,
+    alignItems: 'center',
+  },
+  errorText: {
+    color: theme.colors.error,
+    fontSize: theme.fontSize.md,
   },
 });

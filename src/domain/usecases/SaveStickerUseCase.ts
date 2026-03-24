@@ -19,6 +19,9 @@ export class SaveStickerUseCase implements UseCase<SaveStickerInput, Sticker> {
     if (!input.imageUri) {
       throw new Error('Image URI is required');
     }
+    if (input.width <= 0 || input.height <= 0) {
+      throw new Error('Width and height must be positive numbers');
+    }
 
     const sticker = await this.stickerRepository.save(
       input.imageUri,
