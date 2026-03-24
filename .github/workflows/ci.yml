@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        run: npm test -- --coverage --ci
+
+      - name: Check coverage threshold
+        run: |
+          npx jest --coverage --coverageReporters=json-summary --ci
+          node -e "
+            const coverage = require('./coverage/coverage-summary.json');
+            const total = coverage.total;
+            const metrics = ['statements', 'branches', 'functions', 'lines'];
+            let failed = false;
+            metrics.forEach(m => {
+              if (total[m].pct < 70) {
+                console.error(m + ' coverage ' + total[m].pct + '% is below 70% threshold');
+                failed = true;
+              }
+            });
+            if (failed) process.exit(1);
+            console.log('Coverage thresholds passed!');
+          "
