@@ -35,7 +35,8 @@
           "photosPermission": "Sticker Master needs access to save stickers to your photo library",
           "savePhotosPermission": "Sticker Master needs access to save stickers to your photo library"
         }
-      ]
+      ],
+      "./with-no-push-notifications"
     ]
   }
 }
