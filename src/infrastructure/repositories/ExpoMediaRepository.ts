@@ -1,4 +1,3 @@
-import { AVPlaybackStatus, Video } from 'expo-av';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 

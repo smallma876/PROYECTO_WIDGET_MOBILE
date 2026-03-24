@@ -38,9 +38,10 @@ export function EditorScreen({ navigation, route }: Props): React.JSX.Element {
         width: frameData.width,
         height: frameData.height,
       });
-    } catch (err) {
+    } catch (_err) {
       await haptics.error();
-      // Error is handled by showing the user can retry
+      setIsCropping(false);
+      return;
     } finally {
       setIsCropping(false);
     }

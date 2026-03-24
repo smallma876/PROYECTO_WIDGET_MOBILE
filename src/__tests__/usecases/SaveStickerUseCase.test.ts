@@ -53,6 +53,26 @@ describe('SaveStickerUseCase', () => {
     expect(mockMediaRepo.saveToGallery).not.toHaveBeenCalled();
   });
 
+  it('should throw if width is zero or negative', async () => {
+    await expect(
+      useCase.execute({ imageUri: '/path/to/image.png', width: 0, height: 100 }),
+    ).rejects.toThrow('Width and height must be positive numbers');
+
+    await expect(
+      useCase.execute({ imageUri: '/path/to/image.png', width: -1, height: 100 }),
+    ).rejects.toThrow('Width and height must be positive numbers');
+
+    expect(mockStickerRepo.save).not.toHaveBeenCalled();
+  });
+
+  it('should throw if height is zero or negative', async () => {
+    await expect(
+      useCase.execute({ imageUri: '/path/to/image.png', width: 100, height: 0 }),
+    ).rejects.toThrow('Width and height must be positive numbers');
+
+    expect(mockStickerRepo.save).not.toHaveBeenCalled();
+  });
+
   it('should propagate repository save errors', async () => {
     mockStickerRepo.save.mockRejectedValue(new Error('Storage full'));
 
